@@ -52,6 +52,7 @@ class GameModelTests( TestCase ):
         )
 
         game.handleGuess('X')
+        expectedGuessesTaken += 1
         self.assertEquals( expectedGuessesTaken, game.guesses_taken )
     
 
