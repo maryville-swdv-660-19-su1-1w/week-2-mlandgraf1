@@ -164,10 +164,10 @@ class GameModelTests( TestCase ):
         pass
 
     def test_is_game_over_is_false_if_not_all_letters_guessed( self ):
-        pass
+        guesses_taken < 10
 
     def test_is_game_over_is_true_if_no_guesses_left( self ):
-        pass
+        guesses_taken = 10
 
     def test_is_game_over_is_true_if_all_letters_guessed( self ):
         pass
