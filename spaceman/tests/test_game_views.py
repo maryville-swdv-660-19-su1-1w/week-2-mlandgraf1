@@ -31,6 +31,7 @@ class GameApiViewTests( TestCase ):
 
         self.request_factory = APIRequestFactory()
         self.mock_get_request = self.request_factory.get('dummy')
+        self.mock_put_request = self.request_factory.get('dummy')
 
 
     ### POST (create game) view
@@ -73,3 +74,30 @@ class GameApiViewTests( TestCase ):
     # HINT: remember the `setUp` fixture that is in this test class, 
     #   it constructs things that might be useful
 
+    #get_solution function should respond with a 404 status code when the id for a game is not found
+
+    #{
+    #"solution": "batman"
+    #}
+    #HINT: you're going to need to mock whatever does the game object look up
+
+    def test_get_solution_if_solution_is_found( self ):
+        with patch.object( Game.objects, 'get' ) as mock_get:
+            self.mock_game.word = 'batman'
+            mock_get.return_value = self.mock_game
+
+            response = game_solution( self.mock_get_request, 25 )
+
+            mock_get.assert_called_with( pk = 25 )
+            self.assertEqual ( response.status_code, 200)
+
+            test_solution = { 'solution' : 'batman' }
+            self.assertDictEqual( response.data, test_solution)
+            
+
+    def test_get_solution_show_404_if_game_id_is_not_found( self ):
+        with patch.object( Game.objects, 'get' ) as mock_get:
+            mock_get.side_effect = Game.DoesNotExist
+
+            response = game_solution( self.mock_get_request, 25 )
+            self.assertEqual( response.status_code, 404 )
